@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محمد حسام ماركت</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #e74c3c;
+            --whatsapp-color: #25d366;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+            padding-bottom: 70px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .admin-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            background-color: #f1f2f6;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-price {
+            font-size: 16px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .add-to-cart {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .buy-now-btn {
+            background-color: var(--whatsapp-color);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .modal-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .close-modal {
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+            align-self: flex-start;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .cart-items-list {
+            text-align: right;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .cart-total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 10px 0;
+        }
+
+        .whatsapp-send-btn {
+            background-color: var(--whatsapp-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .cart-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--whatsapp-color);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>محمد حسام ماركت</h1>
+        <div class="contact-info">واتساب: 01224597348</div>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن منتج..." onkeyup="searchProducts()">
+            <button class="admin-btn" onclick="openAdminModal()">إدارة الخزنة</button>
+        </div>
+
+        <div id="productsGrid" class="products-grid"></div>
+    </div>
+
+    <div class="cart-float" onclick="openCartModal()">
+        🛒 سلة المشتريات (<span id="cartCount">0</span>)
+    </div>
+
+    <!-- Modal سلة المشتريات والحساب -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCartModal()">&times;</span>
+            <h3 style="color: var(--primary-color);">مراجعة سلة المشتريات</h3>
+            <div id="cartItemsList" class="cart-items-list"></div>
+            <div class="cart-total-price">
+                المجموع الإجمالي: <span id="cartTotalPrice">0.00</span> جنيه
+            </div>
+            <button class="whatsapp-send-btn" onclick="sendCartToWhatsApp()">تأكيد وإرسال الطلب للواتساب</button>
+        </div>
+    </div>
+
+    <!-- Modal الخزنة -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <h3>لوحة إدارة الخزنة</h3>
+            <p style="margin-top: 10px; font-size: 14px; color: #666;">أدخل كود الخزنة (123321)</p>
+            <input type="password" id="safePin" placeholder="أدخل كود الخزنة">
+            <button class="modal-btn" onclick="checkSafe()">دخول الخزنة</button>
+            <div id="safeResult" style="margin-top: 15px; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "أرز المصري 1 كجم", price: 32.00, category: "البقوليات والحبوب" },
+            { id: 2, name: "مكرونة الملكة 400 جم", price: 14.50, category: "المكرونات" },
+            { id: 3, name: "مكرونة البستان 400 جم", price: 14.00, category: "المكرونات" },
+            { id: 4, name: "زيت عافية ذرة 800 مل", price: 95.00, category: "الزيوت والسمن" },
+            { id: 5, name: "زيت سلايت عباد 750 مل", price: 78.00, category: "الزيوت والسمن" },
+            { id: 6, name: "سمنة روابي 700 جم", price: 65.00, category: "الزيوت والسمن" },
+            { id: 7, name: "سكر الأسرة 1 كجم", price: 35.00, category: "السكر والتحلية" },
+            { id: 8, name: "شاي العروسة 250 جم", price: 55.00, category: "المشروبات" },
+            { id: 9, name: "شاي ليبتون الكحلي 250 جم", price: 60.00, category: "المشروبات" },
+            { id: 10, name: "قهوة البرازيلى سادة 100 جم", price: 45.00, category: "المشروبات" },
+            { id: 11, name: "لبن جهينة كامل الدسم 1 لتر", price: 38.00, category: "الألبان ومنتجاتها" },
+            { id: 12, name: "لبن المراعي 1 لتر", price: 38.00, category: "الألبان ومنتجاتها" },
+            { id: 13, name: "جبنة تتراميكس براميلي 250 جم", price: 28.00, category: "الألبان ومنتجاتها" },
+            { id: 14, name: "جبنة پندس مطبوخة مثلثات 8 قطعات", price: 18.00, category: "الألبان ومنتجاتها" },
+            { id: 15, name: "زبادي جهينة طبيعي 105 جم", price: 7.50, category: "الألبان ومنتجاتها" },
+            { id: 16, name: "قشطة جهينة 100 جم", price: 16.00, category: "الألبان ومنتجاتها" },
+            { id: 17, name: "تونة مكسيم صوابع 140 جم", price: 35.00, category: "المعلبات" },
+            { id: 18, name: "فول حدائق كاليفورنيا 400 جم", price: 22.00, category: "المعلبات" },
+            { id: 19, name: "صلصة طماطم هارفست 300 جم", price: 16.00, category: "المعلبات" },
+            { id: 20, name: "حلاوة طحينية الرشيدي الميزان 350 جم", price: 45.00, category: "المعلبات" },
+            { id: 21, name: "طحينة الأقصر زجاجة 250 جم", price: 38.00, category: "الصوصات والتوابل" },
+            { id: 22, name: "خل العبد 1 لتر", price: 10.00, category: "الصوصات والتوابل" },
+            { id: 23, name: "كاتشب هاينز 300 جم", price: 32.00, category: "الصوصات والتوابل" },
+            { id: 24, name: "مايونيز هاينز 300 جم", price: 42.00, category: "الصوصات والتوابل" },
+            { id: 25, name: "مسحوق أوتوماتيك برسيل 2.5 كجم", price: 135.00, category: "مساحيق الغسيل والنظافة" },
+            { id: 26, name: "مسحوق تايد أوتوماتيك 2.5 كجم", price: 130.00, category: "مساحيق الغسيل والنظافة" },
+            { id: 27, name: "جل غسيل الأطباق فيري 600 مل", price: 45.00, category: "مساحيق الغسيل والنظافة" },
+            { id: 28, name: "صابون وجه دورو 3 قطع", price: 27.00, category: "العناية الشخصية" },
+            { id: 29, name: "معجون أسنان سيجنال 100 مل", price: 32.00, category: "العناية الشخصية" },
+            { id: 30, name: "شامبو باينتين 400 مل", price: 85.00, category: "العناية الشخصية" },
+            { id: 31, name: "مسحوق بيكنج بودر دريم", price: 5.00, category: "المستلزمات والحلويات" },
+            { id: 32, name: "فانيليا دريم باكيت", price: 5.00, category: "المستلزمات والحلويات" },
+            { id: 33, name: "دقيق الضحى 1 كجم", price: 26.00, category: "المستلزمات والحلويات" },
+            { id: 34, name: "عدس بجبة الضحى 500 جم", price: 40.00, category: "البقوليات والحبوب" },
+            { id: 35, name: "لوبيا دراي فود 500 جم", price: 35.00, category: "البقوليات والحبوب" },
+            { id: 36, name: "فاصوليا بيضاء دراي فود 500 جم", price: 38.00, category: "البقوليات والحبوب" },
+            { id: 37, name: "إندومي بيف جامبو", price: 8.00, category: "الوجبات السريعة" },
+            { id: 38, name: "إندومي خضار جامبو", price: 8.00, category: "الوجبات السريعة" },
+            { id: 39, name: "بسكويت أولكر شوكولاتة", price: 6.00, category: "الحلويات والبسكوته" },
+            { id: 40, name: "بسكويت تام تام", price: 5.00, category: "الحلويات والبسكوته" },
+            { id: 41, name: "شيبسي عائلة طعم ليمون", price: 10.00, category: "المقرمشات" },
+            { id: 42, name: "شيبسي عائلة طعم شطة وليمون", price: 10.00, category: "المقرمشات" },
+            { id: 43, name: "مولتو سناك شوكولاتة", price: 8.00, category: "المخبوزات" },
+            { id: 44, name: "باتيه بوسطة جبنة", price: 10.00, category: "المخبوزات" },
+            { id: 45, name: "مياه معدنية نستله 1.5 لتر", price: 9.00, category: "المشروبات والمياه" },
+            { id: 46, name: "عصير برتقال جهينة 1 لتر", price: 28.00, category: "المشروبات والمياه" },
+            { id: 47, name: "عصير تفاح جهينة 1 لتر", price: 28.00, category: "المشروبات والمياه" },
+            { id: 48, name: "كوكاكولا زجاجة 1 لتر", price: 22.00, category: "المشروبات الغازية" },
+            { id: 49, name: "سفن أب زجاجة 1 لتر", price: 22.00, category: "المشروبات الغازية" },
+            { id: 50, name: "حفاضات بابي جونيور مقاس 4 (58 قطعة)", price: 210.00, category: "عناية الأطفال" },
+            { id: 51, name: "جبنة رومي قديمة 250 جم", price: 65.00, category: "الألبان ومنتجاتها" },
+            { id: 52, name: "جبنة شيدر مستوردة 250 جم", price: 75.00, category: "الألبان ومنتجاتها" },
+            { id: 53, name: "لانشون لحم حلواني 250 جم", price: 50.00, category: "المجمدات واللحوم" },
+            { id: 54, name: "برجر بقري أطياب 20 قطعة", price: 165.00, category: "المجمدات واللحوم" },
+            { id: 55, name: "بانيه دجاج أطياب 1 كجم", price: 180.00, category: "المجمدات واللحوم" },
+            { id: 56, name: "بطاطس نصف فروم كواليكو 2.5 كجم", price: 140.00, category: "المجمدات واللحوم" },
+            { id: 57, name: "مرقة دجاج إيفكو مكعبات 24 حبة", price: 30.00, category: "الصوصات والتوابل" },
+            { id: 58, name: "بهارات لحمة مشكلة 100 جم", price: 25.00, category: "الصوصات والتوابل" },
+            { id: 59, name: "فلفل أسود مطحون 100 جم", price: 35.00, category: "الصوصات والتوابل" },
+            { id: 60, name: "كمون مطحون نقي 100 جم", price: 25.00, category: "الصوصات والتوابل" },
+            { id: 61, name: "ملح طعام سياقة 700 جم", price: 5.00, category: "السكر والتحلية" },
+            { id: 62, name: "نشا الذرة فوودز 200 جم", price: 15.00, category: "المستلزمات والحلويات" }
+        ];
+
+        let cart = [];
+
+        function displayProducts(items) {
+            const grid = document.getElementById("productsGrid");
+            if (!grid) return;
+            grid.innerHTML = "";
+            items.forEach(product => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <div>
+                            <div class="product-category">${product.category}</div>
+                            <div class="product-name">${product.name}</div>
+                        </div>
+                        <div>
+                            <div class="product-price">${product.price.toFixed(2)} جنيه</div>
+                            <div class="card-buttons">
+                                <button class="add-to-cart" onclick="addToCart(${product.id})">إضافة للسلة</button>
+                                <button class="buy-now-btn" onclick="buyNow(${product.id})">شراء سريع (واتساب)</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function searchProducts() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query));
+            displayProducts(filtered);
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            document.getElementById("cartCount").innerText = cart.length;
+        }
+
+        function buyNow(id) {
+            const product = products.find(p => p.id === id);
+            let message = `مرحباً، أريد شراء هذا المنتج من محمد حسام ماركت:\n\n- ${product.name}\n- السعر: ${product.price.toFixed(2)} جنيه`;
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/201224597348?text=${encodedMessage}`, '_blank');
+        }
+
+        function openCartModal() {
+            if (cart.length === 0) {
+                alert("السلة فارغة! برجاء إضافة منتجات أولاً.");
+                return;
+            }
+
+            const listContainer = document.getElementById("cartItemsList");
+            listContainer.innerHTML = "";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                listContainer.innerHTML += `
+                    <div class="cart-item-row">
+                        <span>${index + 1}. ${item.name}</span>
+                        <span><b>${item.price.toFixed(2)} جنيه</b></span>
+                    </div>
+                `;
+            });
+
+            document.getElementById("cartTotalPrice").innerText = total.toFixed(2);
+            document.getElementById("cartModal").style.display = "flex";
+        }
+
+        function closeCartModal() {
+            document.getElementById("cartModal").style.display = "none";
+        }
+
+        function sendCartToWhatsApp() {
+            if (cart.length === 0) return;
+
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            let message = "مرحباً، أريد طلب المنتجات الآتية من محمد حسام ماركت:\n\n";
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} - ${item.price.toFixed(2)} جنيه\n`;
+            });
+            message += `\nالإجمالي الكلي: ${total.toFixed(2)} جنيه`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/201224597348?text=${encodedMessage}`, '_blank');
+            closeCartModal();
+        }
+
+        function openAdminModal() {
+            document.getElementById("adminModal").style.display = "flex";
+        }
+
+        function closeAdminModal() {
+            document.getElementById("adminModal").style.display = "none";
+            document.getElementById("safePin").value = "";
+            document.getElementById("safeResult").innerText = "";
+        }
+
+        function checkSafe() {
+            const pin = document.getElementById("safePin").value;
+            const resultDiv = document.getElementById("safeResult");
+            if (pin === "123321") {
+                resultDiv.style.color = "green";
+                resultDiv.innerText = "تم فتح الخزنة بنجاح! رصيد الخزنة الحالي: 15,450 جنيه";
+            } else {
+                resultDiv.style.color = "red";
+                resultDiv.innerText = "كود الخزنة غير صحيح!";
+            }
+        }
+
+        // تشغيل عرض المنتجات مباشرة دون شروط تحميل لتظهر فوراً في المعاينة
+        displayProducts(products);
+    </script>
+</body>
+</html>
